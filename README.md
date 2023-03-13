@@ -2,6 +2,8 @@
 ***
 Welcome! Have you ever wondered how the ls function works? Me neither! Let's find out!!!
 
+*Not yet compatible with windows*
+
 ## Task
 Our goal is to recreate the UNIX command ls, including the functionality of 2 flags: -t which prints files by the time they were last modified, with the most recent files being displayed first, and the -a flag, which includes the hidden, dot directories (it does not by default). We will also be printing the files to the console with ls's -1 format, which displays all files in a single, vertical column. 
 
