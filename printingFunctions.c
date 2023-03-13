@@ -2,17 +2,21 @@
 
 void formatDirPrint(char* dir_path, int length, int index,  bool are_files, int flags){
         if(are_files){
-            printf("\n%s:\n",dir_path);
+            // printf("\n%s:\n",dir_path);
+            printf("\033[0;33m\n%s:\n\033[0m\n",dir_path);
         }
         else if(length == 1 && flags & UNKNOWN_FILES_EXIST){
-            printf("%s:\n",dir_path);
+            // printf("%s:\n",dir_path);
+            printf("\033[0;33m%s:\n\033[0m\n",dir_path);
         }
         else if(length > 1){
             if(index == 0){
-                printf("%s:\n",dir_path);
+                // printf("%s:\n",dir_path);
+                printf("\033[0;33m%s:\n\033[0m\n",dir_path);
             }
             else{
-                printf("\n%s:\n",dir_path);
+                // printf("\n%s:\n",dir_path);
+                printf("\033[0;33m\n%s:\n\033[0m\n",dir_path);
             }
         }
 }
@@ -71,7 +75,11 @@ void printDirectories(file_list* directories, int flags, bool are_files){
         else{
             insertionSort(&head, &lex_cmp);
         }
-        writeFiles(head);
+        bool dir = false;
+        if(length>1){
+            dir = true;
+        }
+        writeFiles(head,dir);
         file_list* temp = directories;
         directories = directories->next;
         free_node(temp);
@@ -85,6 +93,7 @@ void printFiles(file_list* files, int flags){
     bool are_files = false;
     size_t size = 0;
     file_list* head = NULL;
+    // bool is_dir = false;
     int index = 0;
     int length = files->size;
     while(index < length ){
@@ -109,7 +118,13 @@ void printFiles(file_list* files, int flags){
         else{
             are_files = true;
             file_list* temp = files;
-            printf("%s\n",files->pathname);
+            if(files->sb->st_mode & S_IXUSR || files->sb->st_mode &S_IXGRP){
+                // file has execute permission for owner
+                printf("\033[1;32m%s\n\033[0m",files->pathname);
+            }else{    
+                printf("\033[0;35m%s\n\033[0m",files->pathname);
+            }   
+            // printf("%s\n",files->pathname);
             files = files->next;
             free_node(temp);
         }
@@ -119,10 +134,26 @@ void printFiles(file_list* files, int flags){
         printDirectories(head, flags, are_files);
     }
 }
-
-void writeFiles(file_list* head){
+//need to fix bug. if come across subdirectory, will treat it as a regualr directory and print things after it as if it in a reg directory. need to find a way to recirsively print contents of subdirectories
+//if a direcotry, in the file struct have an fd member?
+void writeFiles(file_list* head, bool dir){
     while(head != NULL){
-        printf("%s\n",head->pathname);
+        if(S_ISDIR(head->sb->st_mode)){//if only printing out cwd
+            if(dir == true){
+            }
+            printf("\033[0;33m%s\n\033[0m",head->pathname);//print files in sub directory
+        }else if (head->sb->st_mode & S_IXUSR || head->sb->st_mode &S_IXGRP) {
+            // file has execute permission for owner
+            printf("\033[1;32m%s\n\033[0m",head->pathname);
+        }else{
+            if(dir == true){
+                printf("\t");
+                printf("\033[0;32m%s\n\033[0m",head->pathname);//print files in sub directory
+            }else{
+                printf("\033[0;35m%s\n\033[0m",head->pathname);//print files in current directory
+            }
+        }
+        // printf("%s\n",head->pathname);
         file_list* temp = head;
         head = head->next;
         free_node(temp);
@@ -137,3 +168,4 @@ bool ends_with(char *str, char c) {
     }
     return false;
 }
+
