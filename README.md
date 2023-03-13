@@ -1,6 +1,8 @@
 # Welcome to My Ls
 ***
-Welcome! Have you ever wondered how the ls function works? Me neither! Let's find out!!!
+Welcome! Have you ever wondered how the ls function works? Me neither!
+
+![Screen Shot 2023-03-13 at 2 02 51 PM](https://user-images.githubusercontent.com/73136662/224789334-317b9f8f-6dd2-42b1-aeff-89a22c3eca84.png)
 
 *Not yet compatible with windows*
 
