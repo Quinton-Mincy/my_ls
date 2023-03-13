@@ -28,7 +28,7 @@ bool lex_cmp(file_list* curr_node, file_list* next_node);
 bool time_cmp(file_list* curr_node, file_list* next_node);
 file_list* make_lists(int argc, char** argv, int index, int* flags);
 void free_node(file_list* node);
-void writeFiles(file_list* head);
+void writeFiles(file_list* head, bool dir);
 bool ends_with(char *str, char c);
 void formatDirPrint(char* dir_path, int length, int index,  bool are_files, int flags);
 void printDirectories(file_list* directories, int flags, bool are_files);
