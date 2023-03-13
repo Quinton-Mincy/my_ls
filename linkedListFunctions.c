@@ -19,7 +19,9 @@ file_list* make_lists(int argc, char** argv, int index, int* flags){
         char* pathname = argv[index];
         if((lstat(pathname,sb)) == -1){
             *flags |= UNKNOWN_FILES_EXIST;
-            printf("ls: %s: No such file or directory\n", pathname);
+
+            // printf("\033[0;35m%s\n\033[0m",files->pathname);
+            printf("\033[0;31mls: %s No such file or directory\n\033[0m", pathname);
         }
         else if(S_ISREG(sb->st_mode) || S_ISDIR(sb->st_mode)){
             size++;
